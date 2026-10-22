@@ -1,0 +1,4 @@
+node_modules/
+*.zip
+# ~/.gitignore_global ignores lib/ dirs; this one is source.
+!src/lib/

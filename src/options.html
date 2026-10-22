@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Paygate Annotate</title>
+  <link rel="stylesheet" href="options.css">
+  <style id="preview-styles"></style>
+</head>
+<body>
+  <header>
+    <h1>Paygate Annotate</h1>
+    <div class="savebar">
+      <span id="status"></span>
+      <button id="revert" type="button">Revert</button>
+      <button id="save" type="button" class="primary">Save</button>
+    </div>
+  </header>
+
+  <section>
+    <h2>Styles</h2>
+    <p class="hint">Each style becomes an entry in the right-click <b>Paygate</b> menu. CSS is a list of declarations
+      applied to the link (e.g. <code>color: red; text-decoration: line-through; opacity: .6</code>); they're applied
+      with <code>!important</code>. Before/After text is shown around the link text.</p>
+    <table id="styles">
+      <thead><tr><th>Name</th><th>Before</th><th>After</th><th>CSS</th><th>Preview</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <button id="add-style" type="button">+ Add style</button>
+  </section>
+
+  <section>
+    <h2>Rules</h2>
+    <p class="hint">First match wins, top to bottom. <b>Domain</b> matches the domain and all its subdomains
+      (<code>theatlantic.com</code> covers <code>www.theatlantic.com</code>). <b>Regex</b> is tested, case-insensitively,
+      against the full destination URL (for Google News links only the publisher host is known, as
+      <code>https://host/</code>).</p>
+    <input id="rule-filter" type="search" placeholder="Filter rules…">
+    <table id="rules">
+      <thead><tr><th></th><th>Kind</th><th>Pattern</th><th>Style</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <button id="add-rule" type="button">+ Add rule</button>
+  </section>
+
+  <section>
+    <h2>Import / export</h2>
+    <p class="hint">The whole config as JSON. Export fills the box; Import replaces the editor contents (then Save).</p>
+    <div class="row">
+      <button id="export" type="button">Export</button>
+      <button id="import" type="button">Import</button>
+      <button id="reset" type="button">Reset styles to defaults</button>
+    </div>
+    <textarea id="json" rows="10" spellcheck="false"></textarea>
+  </section>
+
+  <script src="lib/core.js"></script>
+  <script src="lib/store.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

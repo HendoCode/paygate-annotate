@@ -1,0 +1,9 @@
+{
+  "name": "paygate-annotate",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Chrome extension that marks links to sites you'd rather not visit.",
+  "scripts": {
+    "test": "node --test test/"
+  }
+}
