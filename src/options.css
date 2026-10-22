@@ -39,9 +39,10 @@ button.primary { background: var(--accent); border-color: var(--accent); color: 
 button.icon { padding: 2px 8px; }
 #styles td:nth-child(1) input { width: 9em; }
 #styles td:nth-child(2) input, #styles td:nth-child(3) input { width: 5em; text-align: center; }
-#styles td:nth-child(4) { width: 45%; }
+#styles td:nth-child(4) { width: 30%; }
+#styles td:nth-child(5) { width: 20%; }
 #styles textarea { width: 100%; min-height: 3.2em; font-family: ui-monospace, monospace; font-size: 12px; resize: vertical; }
-#styles td:nth-child(5) { white-space: nowrap; }
+#styles td:nth-child(6) { white-space: nowrap; }
 #rules td:nth-child(3) { width: 60%; }
 #rules td:nth-child(3) input { width: 100%; font-family: ui-monospace, monospace; }
 #rules td:first-child { white-space: nowrap; }
@@ -49,3 +50,5 @@ button.icon { padding: 2px 8px; }
 #json { width: 100%; font-family: ui-monospace, monospace; font-size: 12px; margin-top: 8px; }
 .row { display: flex; gap: 8px; }
 .preview { color: var(--accent); text-decoration: underline; }
+.preview-card { padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--field); }
+.preview-source { font-size: 11px; color: var(--muted); }

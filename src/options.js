@@ -47,9 +47,11 @@
         });
         return input;
       };
-      const preview = el('a', { className: 'preview', href: '#', textContent: 'Example headline' });
-      preview.setAttribute('data-paygate', s.id);
-      preview.addEventListener('click', (e) => e.preventDefault());
+      const link = el('a', { className: 'preview', href: '#', textContent: 'Example headline' });
+      link.setAttribute('data-paygate', s.id);
+      link.addEventListener('click', (e) => e.preventDefault());
+      const preview = el('div', { className: 'preview-card' }, el('div', { className: 'preview-source', textContent: 'Publisher' }), link);
+      preview.setAttribute('data-paygate-card', s.id);
       const del = el('button', { type: 'button', className: 'icon', title: 'Delete style', textContent: '✕' });
       del.addEventListener('click', () => {
         cfg.styles.splice(i, 1);
@@ -61,6 +63,7 @@
         el('td', {}, bind('before', el('input', { type: 'text' }))),
         el('td', {}, bind('after', el('input', { type: 'text' }))),
         el('td', {}, bind('css', el('textarea', { spellcheck: false }))),
+        el('td', {}, bind('cardCss', el('textarea', { spellcheck: false }))),
         el('td', {}, preview),
         el('td', {}, del)));
     });
@@ -128,7 +131,7 @@
   }
 
   $('#add-style').addEventListener('click', () => {
-    cfg.styles.push({ id: uniqueStyleId('style'), name: 'New style', before: '', after: '', css: '' });
+    cfg.styles.push({ id: uniqueStyleId('style'), name: 'New style', before: '', after: '', css: '', cardCss: '' });
     changed();
     render();
   });

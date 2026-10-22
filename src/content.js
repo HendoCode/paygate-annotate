@@ -7,6 +7,7 @@
   const store = globalThis.PaygateStore;
   const ATTR = 'data-paygate';
   const BARE = ATTR + '-bare';
+  const CARD = ATTR + '-card';
 
   let cfg = { styles: [], rules: [] };
   let styleIds = new Set();
@@ -19,7 +20,8 @@
 
   // Google News links are opaque /read/<token> URLs. Each article card carries a
   // faviconV2?url=https://publisher.example image, so walk up from the link to
-  // the nearest ancestor holding exactly one such favicon.
+  // the nearest ancestor holding exactly one such favicon. That ancestor is the
+  // article card.
   function googleNewsTarget(a) {
     let el = a;
     for (let depth = 0; el && depth < 10; depth++, el = el.parentElement) {
@@ -29,7 +31,7 @@
         try {
           const site = new URL(favs[0].src).searchParams.get('url');
           const u = site && core.parseHttpUrl(site);
-          return u ? { host: u.hostname, url: null } : null;
+          return u ? { host: u.hostname, url: null, card: el } : null;
         } catch (e) {
           return null;
         }
@@ -68,6 +70,15 @@
     } else if (a.hasAttribute(ATTR)) {
       a.removeAttribute(ATTR);
       a.removeAttribute(BARE);
+    }
+    // Every link in a card resolves to the same target, so they agree on this.
+    const card = target && target.card;
+    if (card && card.isConnected) {
+      if (styleId) {
+        if (card.getAttribute(CARD) !== styleId) card.setAttribute(CARD, styleId);
+      } else if (card.hasAttribute(CARD)) {
+        card.removeAttribute(CARD);
+      }
     }
   }
 
@@ -128,7 +139,8 @@
     if (msg && msg.type === 'paygate:resolve-context-link') {
       const a = lastContextLink;
       if (a) targetCache.delete(a);
-      sendResponse({ target: a ? resolveTarget(a) : null });
+      const t = a && resolveTarget(a);
+      sendResponse({ target: t ? { host: t.host, url: t.url } : null });
     }
   });
 

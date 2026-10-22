@@ -24,7 +24,9 @@ Click the toolbar icon (or **Paygate → Edit rules & styles…**) to manage sty
   - Redirect wrappers are unwrapped (`google.com/url?q=`, `l.facebook.com/l.php?u=`, DuckDuckGo `uddg=`, and any
     `url`/`u`/`target`/`dest`/… param that holds an absolute URL on a different host).
   - **Google News** `/read/…` links are opaque, so the publisher comes from the article card's
-    `faviconV2?url=https://publisher` image. Regex rules see only `https://<publisher-host>/` there.
+    `faviconV2?url=https://publisher` image. Regex rules see only `https://<publisher-host>/` there. The element
+    holding that favicon is the article card; it gets `data-paygate-card="<styleId>"` and the style's **Card CSS**
+    (default: Ban `opacity: .4` plus a red dashed outline, Demur `opacity: .7`, Awesome a green left bar).
   - Shorteners like `t.co` aren't resolved (that would require fetching them).
 - First matching rule wins; rules are ordered in the options page.
 

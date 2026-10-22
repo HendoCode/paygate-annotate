@@ -71,8 +71,20 @@ test('buildStylesheet', () => {
   assert.ok(!css.includes('}  body'), 'user CSS cannot close the rule');
 });
 
+test('buildStylesheet emits card rules only when cardCss is set', () => {
+  const css = core.buildStylesheet([{ id: 'ban', cardCss: 'opacity: .4' }, { id: 'meh', cardCss: '' }]);
+  assert.match(css, /\[data-paygate-card="ban"\] \{ opacity: \.4 !important \}/);
+  assert.ok(!css.includes('data-paygate-card="meh"'));
+});
+
 test('normalizeConfig seeds default styles', () => {
   const cfg = core.normalizeConfig(undefined);
   assert.deepEqual(cfg.styles.map((s) => s.name), ['Ban', 'Demur', 'Awesome']);
+  assert.match(cfg.styles[0].cardCss, /opacity: .4; outline: 2px dashed/);
   assert.deepEqual(cfg.rules, []);
+});
+
+test('normalizeConfig fills cardCss for pre-card configs but keeps explicit blanks', () => {
+  const cfg = core.normalizeConfig({ styles: [{ id: 'ban', name: 'Ban' }, { id: 'demur', cardCss: '' }, { id: 'mine' }] });
+  assert.deepEqual(cfg.styles.map((s) => s.cardCss), [core.DEFAULT_STYLES[0].cardCss, '', '']);
 });

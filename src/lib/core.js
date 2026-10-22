@@ -4,9 +4,9 @@
   'use strict';
 
   const DEFAULT_STYLES = [
-    { id: 'ban', name: 'Ban', before: '☢', after: '☢', css: 'color: #c62828; text-decoration: line-through;' },
-    { id: 'demur', name: 'Demur', before: '🤨', after: '', css: 'color: #888; font-style: italic;' },
-    { id: 'awesome', name: 'Awesome', before: '⭐', after: '', css: 'color: #2e7d32; font-weight: bold;' },
+    { id: 'ban', name: 'Ban', before: '☢', after: '☢', css: 'color: #c62828; text-decoration: line-through;', cardCss: 'opacity: .4; outline: 2px dashed #c62828; outline-offset: 2px;' },
+    { id: 'demur', name: 'Demur', before: '🤨', after: '', css: 'color: #888; font-style: italic;', cardCss: 'opacity: .7;' },
+    { id: 'awesome', name: 'Awesome', before: '⭐', after: '', css: 'color: #2e7d32; font-weight: bold;', cardCss: 'box-shadow: inset 3px 0 0 #2e7d32;' },
   ];
 
   // Multi-label public suffixes we care about. Not the full PSL, just enough to
@@ -161,6 +161,8 @@
       const marker = 'display: inline-block !important; text-decoration: none !important;';
       if (s.before) out.push(`${sel}:not([${attr}-bare])::before { content: ${cssString(s.before)} !important; ${marker} margin-right: .25em !important; }`);
       if (s.after) out.push(`${sel}:not([${attr}-bare])::after { content: ${cssString(s.after)} !important; ${marker} margin-left: .25em !important; }`);
+      // Whole article card, on sites with an adapter that can find one.
+      if (s.cardCss) out.push(`[${attr}-card="${s.id.replace(/"/g, '')}"] { ${importantDeclarations(s.cardCss)} }`);
     }
     return out.join('\n');
   }
@@ -169,8 +171,14 @@
     cfg = cfg || {};
     const styles = Array.isArray(cfg.styles) ? cfg.styles : DEFAULT_STYLES.map((s) => ({ ...s }));
     const rules = Array.isArray(cfg.rules) ? cfg.rules : [];
+    // Styles saved before cardCss existed pick up the default card CSS for
+    // their id; an explicit '' (cleared by the user) is kept.
+    const defaultCard = (id) => (DEFAULT_STYLES.find((d) => d.id === id) || {}).cardCss || '';
     return {
-      styles: styles.filter((s) => s && s.id).map((s) => ({ id: String(s.id), name: String(s.name || s.id), before: String(s.before || ''), after: String(s.after || ''), css: String(s.css || '') })),
+      styles: styles.filter((s) => s && s.id).map((s) => ({
+        id: String(s.id), name: String(s.name || s.id), before: String(s.before || ''), after: String(s.after || ''), css: String(s.css || ''),
+        cardCss: s.cardCss === undefined ? defaultCard(String(s.id)) : String(s.cardCss || ''),
+      })),
       rules: rules.filter((r) => r && r.pattern).map((r) => ({ kind: r.kind === 'regex' ? 'regex' : 'domain', pattern: String(r.pattern).trim(), styleId: String(r.styleId || '') })),
     };
   }
